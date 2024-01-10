@@ -1,0 +1,3 @@
+require 'openssl'
+
+gem 'openssl'
