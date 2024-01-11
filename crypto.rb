@@ -42,8 +42,19 @@ plaintext = gets.chomp
 # Encryption
 ciphertext = encrypt(plaintext, key, iv)
 puts "Ciphertext: #{ciphertext.unpack('H*').first}"
+
+# Load the RSA public key
+rsa_key = OpenSSL::PKey::RSA.generate(2048)
+public_key = rsa_key.public_key
+
+# encrypt the ciphertext using RSA public key
+encrypted_cipher = public_key.public_encrypt(ciphertext)
+
+puts "Encrypted Ciphertext: #{encrypted_cipher.unpack('H*').first}"
 # Decryption
-decryptext = decrypt(ciphertext, key, iv)
+decrypted_cipher = rsa_key.private_decrypt(encrypted_cipher)
+puts "Decrypted Ciphertext: #{decrypted_cipher.unpack('H*').first}"
+decryptext = decrypt(decrypted_cipher, key, iv)
 puts "Decryptext: #{decryptext}"
 
 
