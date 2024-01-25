@@ -1,4 +1,5 @@
 require 'openssl'
+require 'base64'
 
 # define the key and the IV for AES-256 bit
 key = OpenSSL::Cipher.new('AES-256-CBC').random_key
@@ -49,8 +50,19 @@ public_key = rsa_key.public_key
 
 # encrypt the ciphertext using RSA public key
 encrypted_cipher = public_key.public_encrypt(ciphertext)
+header = "------ BEGIN RSA MESSAGE ------"
+footer = "------ END RSA MESSAGE ------"
+encoded_cipher = Base64.strict_encode64(encrypted_cipher)
+block_length = 31
+puts header
+encoded_cipher.chars.each_slice(block_length) do |block|
+	puts block.join
+end
+puts footer
 
-puts "Encrypted Ciphertext: #{encrypted_cipher.unpack('H*').first}"
+# decode using base64
+decoded_cipher = Base64.strict_decode64(encoded_cipher)
+
 # Decryption
 decrypted_cipher = rsa_key.private_decrypt(encrypted_cipher)
 puts "Decrypted Ciphertext: #{decrypted_cipher.unpack('H*').first}"
