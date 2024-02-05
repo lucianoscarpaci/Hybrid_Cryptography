@@ -41,7 +41,9 @@ end
 
 MAX_PLAINTEXT_LENGTH = 100
 MAX_BLOCK_LENGTH = 31
+MAX_ATTEMPTS = 5
 hybrid_crypto = HybridCrypto.new(aes_key, aes_iv, rsa_key)
+attempts = MAX_ATTEMPTS
 loop do
 	puts "------ BEGIN PLAINTEXT ------\n\n"
 	plaintext = gets.chomp.strip
@@ -68,6 +70,8 @@ loop do
 		puts "#{decrypt_block}"
 		return message_block, key_block, decrypt_block
 	else
-		puts "Invalid plaintext! Please try again."
+		attempts -= 1
+		puts "Invalid plaintext! Please try again. You have #{attempts} attempts left."
 	end
+	break if attempts == 0
 end
