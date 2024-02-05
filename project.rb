@@ -27,39 +27,47 @@ class HybridCrypto
 	end
 
 	def decrypt(encoded_data, encoded_key)
-		aes_key = @rsa_key.private_decrypt(Base64.strict_decode64(encoded_key))
+		decoded_key = Base64.strict_decode64(encoded_key)
+		decoded_data = Base64.strict_decode64(encoded_data)
+		aes_key = @rsa_key.private_decrypt(decoded_key)
 		aes_cipher = OpenSSL::Cipher.new('AES-256-CBC')
 		aes_cipher.decrypt
 		aes_cipher.key = aes_key
 		aes_cipher.iv = @aes_iv
-		decrypted_data = aes_cipher.update(Base64.strict_decode64(encoded_data)) + aes_cipher.final
+		decrypted_data = aes_cipher.update(decoded_data) + aes_cipher.final
 		return decrypted_data
 	end
 end
 
+MAX_PLAINTEXT_LENGTH = 100
+MAX_BLOCK_LENGTH = 31
 hybrid_crypto = HybridCrypto.new(aes_key, aes_iv, rsa_key)
-puts "------ BEGIN PLAINTEXT ------\n\n"
-plaintext = gets.chomp
-block_length = 31
-puts "\n------ END PLAINTEXT ------"
+loop do
+	puts "------ BEGIN PLAINTEXT ------\n\n"
+	plaintext = gets.chomp.strip
 
-# Encryption
-encoded_data, encoded_key = hybrid_crypto.encrypt(plaintext)
-header = "------ BEGIN RSA MESSAGE ------"
-block_encoded_data = encoded_data.scan(/.{1,#{block_length}}/).join("\n")
-footer = "------ END RSA MESSAGE ------"
-message_block = "#{header}\n\n#{block_encoded_data}\n\n#{footer}"
-puts "#{message_block}"
-pub_header = "------ BEGIN RSA PUBLIC KEY ------"
-block_encoded_key = encoded_key.scan(/.{1,#{block_length}}/).join("\n")
-pub_footer = "------ END RSA PUBLIC KEY ------"
-key_block = "#{pub_header}\n\n#{block_encoded_key}\n\n#{pub_footer}"
-puts "#{key_block}"
-
-# Decryption
-decrypted_data = hybrid_crypto.decrypt(encoded_data, encoded_key)
-dec_header = "------ BEGIN DECRYPTED MESSAGE ------"
-block_decrypted_data = decrypted_data.scan(/.{1,#{block_length}}/).join("\n")
-dec_footer = "------ END DECRYPTED MESSAGE ------"
-decrypt_block = "#{dec_header}\n\n#{block_decrypted_data}\n\n#{dec_footer}"
-puts "#{decrypt_block}"
+	if plaintext.match?(/\A[A-Za-z\s]+\z/) && plaintext.length <= MAX_PLAINTEXT_LENGTH
+		block_length = MAX_BLOCK_LENGTH
+		puts "\n------ END PLAINTEXT ------"
+		encoded_data, encoded_key = hybrid_crypto.encrypt(plaintext)
+		header = "------ BEGIN RSA MESSAGE ------"
+		block_encoded_data = encoded_data.scan(/.{1,#{block_length}}/).join("\n")
+		footer = "------ END RSA MESSAGE ------"
+		message_block = "#{header}\n\n#{block_encoded_data}\n\n#{footer}"
+		puts "#{message_block}"
+		pub_header = "------ BEGIN RSA PUBLIC KEY ------"
+		block_encoded_key = encoded_key.scan(/.{1,#{block_length}}/).join("\n")
+		pub_footer = "------ END RSA PUBLIC KEY ------"
+		key_block = "#{pub_header}\n\n#{block_encoded_key}\n\n#{pub_footer}"
+		puts "#{key_block}"
+		decrypted_data = hybrid_crypto.decrypt(encoded_data, encoded_key)
+		dec_header = "------ BEGIN DECRYPTED MESSAGE ------"
+		block_decrypted_data = decrypted_data.scan(/.{1,#{block_length}}/).join("\n")
+		dec_footer = "------ END DECRYPTED MESSAGE ------"
+		decrypt_block = "#{dec_header}\n\n#{block_decrypted_data}\n\n#{dec_footer}"
+		puts "#{decrypt_block}"
+		return message_block, key_block, decrypt_block
+	else
+		puts "Invalid plaintext! Please try again."
+	end
+end
