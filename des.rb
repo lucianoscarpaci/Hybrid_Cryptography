@@ -1,36 +1,5 @@
 require 'openssl'
 
-def bin2hex(s)
-  mp = {
-    '0000' => '0',
-    '0001' => '1',
-    '0010' => '2',
-    '0011' => '3',
-    '0100' => '4',
-    '0101' => '5',
-    '0110' => '6',
-    '0111' => '7',
-    '1000' => '8',
-    '1001' => '9',
-    '1010' => 'A',
-    '1011' => 'B',
-    '1100' => 'C',
-    '1101' => 'D',
-    '1110' => 'E',
-    '1111' => 'F'
-  }
-
-  hex = ''
-  (0..s.length - 1).step(4) do |i|
-    ch = ''
-    ch += s[i]
-    ch += s[i + 1]
-    ch += s[i + 2]
-    ch += s[i + 3]
-    hex += mp[ch]
-  end
-  hex
-end
 
 def generate_subkeys(key)
   key = key.unpack1('B64')
@@ -64,16 +33,8 @@ def generate_subkeys(key)
     #
     # Compression of the key from 56 bits to 48 bits
     permutedchoice2_key.each { |bit| permutedchoice2 << bit }
-    subkeys = []
-    subkeys << bin2hex(permutedchoice2_key.join)
     #Print the subkeys and check if they are valid or not
-    puts "Subkey #{i + 1}: #{subkeys}"
-    valid = subkeys.length == subkeys.uniq.length && subkeys.all?
-    if valid
-      puts "The provided subkeys meet the criteria."
-    else
-      puts "The provided subkeys do not meet the criteria."
-    end
+    puts "Subkey #{i + 1}: #{permutedchoice2_key.join}"
   end
 end 
 
