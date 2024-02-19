@@ -1,7 +1,8 @@
 require 'openssl'
 
+subkeys = []
 
-def generate_subkeys(key)
+def generate_subkeys(key, subkeys)
   key = key.unpack1('B64')
   permuted_key = [57, 49, 41, 33, 25, 17, 9, 1, 58, 50, 42, 34, 26, 18,
                   10, 2, 59, 51, 43, 35, 27, 19, 11, 3, 60, 52, 44, 36,
@@ -33,13 +34,30 @@ def generate_subkeys(key)
     #
     # Compression of the key from 56 bits to 48 bits
     permutedchoice2_key.each { |bit| permutedchoice2 << bit }
-    #Print the subkeys and check if they are valid or not
-    puts "Subkey #{i + 1}: #{permutedchoice2_key.join}"
+    #Store the subkeys into an array
+    subkeys << permutedchoice2_key.join
   end
-end 
+  return subkeys
+end
+
+def encrypt(plaintext, subkeys)
+  cipher = OpenSSL::Cipher.new('DES-ECB')
+  cipher.encrypt
+  # convert the binary key to 8 bytes using padding/ljust
+  key = subkeys[0].ljust(8, "\x00")[0, 8]
+  cipher.key = key
+  encrypted = cipher.update(plaintext) + cipher.final
+  return encrypted
+end
+
 
 plaintext = '123456ABCD132536'
 key = 'AABB09182736CCDD'
 
-generate_subkeys(key)
-puts
+
+subkeys_array = generate_subkeys(key, subkeys)
+#puts subkeys_array.inspect
+
+
+ciphertext = encrypt(plaintext, subkeys_array)
+puts ciphertext.unpack('H*').first
