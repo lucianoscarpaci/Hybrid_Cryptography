@@ -1,44 +1,66 @@
-# CIS-5371
+# 🔐 Hybrid Cryptography
 
-The one page description of the architecture of the code is in the
-Microsoft Word document "A hybrid Cryptographic Implementation.docx" in the CIS-5371 directory.
+Welcome to the **Hybrid Cryptography** project! This repository showcases a powerful combination of cryptographic algorithms to ensure data security. Dive into the world of encryption with us! 🌐🔒
 
-Usage
+## 📄 Project Overview
 
-Install all the required software packages in the Gemfile by running:
+For a detailed architectural description, please refer to the Microsoft Word document **"A hybrid Cryptographic Implementation.docx"** located in the CIS-5371 directory.
 
-```ruby bundle install```
+## 🚀 Getting Started
 
-Create a .env file in the CIS-5371 directory with the following enviroment variables inside:
+### Prerequisites
 
-For ECC:
-ECC_PUBLIC_KEY=, ECC_PRIVATE_KEY=,
+Ensure you have all the necessary software packages installed. You can do this by running the following command:
 
-For AES:
-AES_KEY=, AES_IV=,
+```bash
+bundle install
+```
 
-For Triple DES:
-DES_KEY=,
+### Environment Setup
 
-For RSA:
-RSA_KEY=, PUBLIC_KEY=,
+Create a `.env` file in the CIS-5371 directory with the following environment variables:
 
-After all is successful to run the program, run the following command:
+- **For ECC:**
+  - `ECC_PUBLIC_KEY=`
+  - `ECC_PRIVATE_KEY=`
 
-```ruby menu.rb``` - the main program User Interface to run all the algorithms.
+- **For AES:**
+  - `AES_KEY=`
+  - `AES_IV=`
 
-Hybrid crypto 3des_rsa:
-<img src="./gifs/3des_rsa_encryption.gif">
+- **For Triple DES:**
+  - `DES_KEY=`
 
-Hybrid crypto aes_rsa:
-<img src="./gifs/aes_rsa_encryption.gif">
+- **For RSA:**
+  - `RSA_KEY=`
+  - `PUBLIC_KEY=`
 
-Hybrid crypto ecc_aes:
-<img src="./gifs/ecc_aes_encryption.gif">
+## 🛠️ Usage
 
-Hybrid crypto ecc_blowfish:
-<img src="./gifs/blowfish_encryption.gif">
+Once everything is set up, you can run the main program using:
 
+```bash
+ruby menu.rb
+```
 
+This will launch the User Interface to run all the algorithms. Enjoy exploring the cryptographic techniques! 🔍🔑
 
+## 🎥 Visual Demonstrations
 
+Check out the encryption processes in action:
+
+- **Hybrid crypto 3des_rsa:**
+  ![3des_rsa_encryption](./gifs/3des_rsa_encryption.gif)
+
+- **Hybrid crypto aes_rsa:**
+  ![aes_rsa_encryption](./gifs/aes_rsa_encryption.gif)
+
+- **Hybrid crypto ecc_aes:**
+  ![ecc_aes_encryption](./gifs/ecc_aes_encryption.gif)
+
+- **Hybrid crypto ecc_blowfish:**
+  ![blowfish_encryption](./gifs/blowfish_encryption.gif)
+
+## 📬 Contact
+
+For any questions or feedback, feel free to reach out. Let's make cryptography accessible and fun! 🎉🔐
