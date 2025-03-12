@@ -1,10 +1,11 @@
 # 🔐 Hybrid Cryptography
 
-Welcome to the **Hybrid Cryptography** project! This repository showcases a powerful combination of cryptographic algorithms to ensure data security. Dive into the world of encryption with us! 🌐🔒
+Welcome to the **Hybrid Cryptography** project! This repository showcases a powerful combination of cryptographic algorithms to ensure data security. Dive into the world of encryption with me. 🌐🔒
 
 ## 📄 Project Overview
 
-For a detailed architectural description, please refer to the Microsoft Word document **"A hybrid Cryptographic Implementation.docx"** located in the CIS-5371 directory.
+The project contains a menu to run various hybrid cryptographic algorithms. From this menu, you can choose any of the following: ECC-AES, ECC-Blowfish, AES-RSA, and 3DES-RSA. Each algorithm has its own unique encryption and decryption process, which you can explore through the User Interface. 🛠️🔍
+
 
 ## 🚀 Getting Started
 
@@ -64,3 +65,7 @@ Check out the encryption processes in action:
 ## 📬 Contact
 
 For any questions or feedback, feel free to reach out. Let's make cryptography accessible and fun! 🎉🔐
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
